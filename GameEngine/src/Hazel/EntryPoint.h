@@ -8,7 +8,12 @@ extern Hazel::Application* Hazel::CreateApplication();
 
 int main(int argc, char**argv)
 {
-	printf("Hazel Engine\n");
+	//Initializes log
+	Hazel::Log::Init();
+	HAZEL_CORE_WARN("Initialized Log!");
+	HAZEL_WARN("Hello!");
+
+	//Loop that runs application.cpp
 	auto app = Hazel::CreateApplication();
 	app->Run();
 	delete app;
