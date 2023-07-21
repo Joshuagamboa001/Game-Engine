@@ -3,6 +3,7 @@
 #include "Application.h"
 
 #include "Hazel/Log.h"
+#include "Input.h"
 
 #include <glad/glad.h>
 
@@ -61,7 +62,7 @@ namespace Hazel {
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
-
+			
 			m_Window->OnUpdate();
 		}
 	
