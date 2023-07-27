@@ -14,18 +14,18 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "GameEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "GameEngine/vendor/Glad/include"
-IncludeDir["ImGui"] = "GameEngine/vendor/imgui2"
+IncludeDir["ImGui"] = "GameEngine/vendor/imgui"
 IncludeDir["glm"] = "GameEngine/vendor/glm"
 
 include "GameEngine/vendor/GLFW"
 include "GameEngine/vendor/Glad"
-include "GameEngine/vendor/imgui2"
+include "GameEngine/vendor/imgui"
 
 
 project "GameEngine"
 	location "GameEngine"
-	kind "SharedLib"
-	staticruntime "off"
+	kind "StaticLib"
+	staticruntime "on"
 	language "C++"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -39,7 +39,12 @@ project "GameEngine"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs
@@ -73,30 +78,25 @@ project "GameEngine"
 			"GLFW_INCLUDE_NONE"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/SandBox/\"")
-		}
-
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
 		runtime "Release"
-		symbols "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "HZ_DIST"
 		runtime "Release"
-		symbols "On"
+		optimize "on"
 
 project "SandBox"
 	location "SandBox"
 	kind "ConsoleApp"
-	staticruntime "off"
+	staticruntime "on"
 	language "C++"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -112,6 +112,7 @@ project "SandBox"
 	{
 		"GameEngine/vendor/spdlog/include",
 		"GameEngine/src",
+		"GameEngine/vendor",
 		"%{IncludeDir.glm}"
 	}
 
@@ -138,11 +139,10 @@ project "SandBox"
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
 		runtime "Release"
-		symbols "On"
+		optimize "On"
 
 	filter "configurations:Dist"
 		defines "HZ_DIST"
 		runtime "Release"
-		symbols "On"
 		optimize "On"
 

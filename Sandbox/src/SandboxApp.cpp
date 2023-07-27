@@ -10,12 +10,18 @@ public:
 
 	void OnUpdate() override
 	{
-		HAZEL_INFO("ExampleLayer::Update");
+
 	}
 
 	void OnEvent(Hazel::Event& event) override
 	{
-		HAZEL_TRACE("{0}", event);
+		if (event.GetEventType() == Hazel::EventType::KeyPressed)
+		{
+			Hazel::KeyPressedEvent& e = (Hazel::KeyPressedEvent&)event;
+			if (e.GetKeyCode() == HAZEL_KEY_TAB)
+				HAZEL_TRACE("Tab key is pressed (event)!");
+			HAZEL_TRACE("{0}", (char)e.GetKeyCode());
+		}
 	}
 };
 
